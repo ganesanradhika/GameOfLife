@@ -1,0 +1,47 @@
+*****************************************
+Game Of Life Application
+*****************************************
+
+1. The application takes in put from input.txt file placed inside WebContent/files of the application.
+2. The application writes the output of each run in output_<timestamp>.txt. The results can be verified 
+   by analyzing the output.
+   
+   
+******************************************
+Technology stack
+******************************************
+
+1. The application uses JSF 2, Java 7 and Ant for build.
+
+******************************************
+Build and Deploy Instructions
+******************************************
+
+1. Please install Apache Tomcat 7 from https://tomcat.apache.org/download-70.cgi . (Default tomcat port - 8080)
+2. Create environment property - CATALINA_HOME and set it to Tomcat root directory.
+3. Apache ant (https://ant.apache.org/bindownload.cgi). (Default port - 8080)
+4. Create environment property - ANT_HOME and set it to Ant root directory.
+5. Append the following to Path variable - %CATALINA_HOME%\bin and %ANT_HOME%\bin.
+6. Build the code using command - ant -f build.xml.
+7. Copy the war file to %CATALINA_HOME%\webapps.
+8. Restart the server. 
+
+*******************************************
+Application URL
+*******************************************
+
+1. http://localhost:<tomcat_port>/GameOfLifeWeb/faces/lifeBean.xhtml
+
+*******************************************
+Additional Features
+*******************************************
+1. The application has an option to open the file location where the output files are written. 
+2. The user can view the input and output on a web page in form of grid. Alive cells are RED and dead ones are BLACK.
+3. The user has an option to edit the value of a given cell in the web page itself.
+
+********************************************
+Constraint
+********************************************
+
+1. The application can open the output folder in Windows OS.
+2. Application doesn't use AJAX.

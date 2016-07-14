@@ -1,0 +1,177 @@
+<project default="init" basedir=".">
+
+
+   <!-- Automated building -->
+   
+  <target name="init">
+  
+    <property name="debug" value="on"/>
+    <property name="build.compiler" value="modern"/>
+  
+    <property environment="env"/>
+  
+    <property name="temp-dir" value="./build"/>
+    <property name="project" value="GameOfLife"/>
+    <property name="zipfile-suffix" value="${project}_webapp.zip"/>
+    
+    <property name="webcontent-directory" value="${temp-dir}/WebContent"/>
+    <property name="webinf-directory" value="${temp-dir}/WebContent/WEB-INF"/>
+    <property name="classes-outputdirectory" value="${temp-dir}/WebContent/WEB-INF/classes"/>
+    <property name="src-outputdirectory" value="${temp-dir}/WebContent/WEB-INF/src"/>
+    <property name="src-inputdirectory" value="${temp-dir}/src"/>
+    <property name="bindir" value="${temp-dir}/build_bin"/>
+    <property name="binpaths-dir" value="${temp-dir}/build_bin/GameOfLife"/>
+    <property name="stagedir" value="${temp-dir}/staging"/>
+    <property name="libdir" value="${temp-dir}/WebContent/WEB-INF/lib"/>
+  <!--   <property name="configdir" value="${temp-dir}/config"/> -->
+
+    <property name="cm-stage-dir" value="./build"/>    
+    
+<echo message="Radhika G....${env.CATALINA_HOME}"/>
+	
+    <path id="classpath">
+        <fileset id="libFiles" dir="${libdir}">
+            <include name="**/*.jar"/>
+        </fileset>
+        
+        <fileset id="commonLibFiles" dir="${env.CATALINA_HOME}/lib">
+            <include name="jsp-api.jar"/>
+            <include name="servlet-api.jar"/>
+         
+        </fileset>
+    </path>
+    
+
+
+  </target>
+
+  <target name="create-bin-directories" depends="init">
+      <echo message="Make output directories..."/>
+      <!-- Make sure all required dir's are there -->
+      <mkdir dir="${bindir}"/>
+      <mkdir dir="${binpaths-dir}"/>
+      <mkdir dir="${stagedir}"/>
+      <mkdir dir="${classes-outputdirectory}"/>
+      <mkdir dir="${cm-stage-dir}"/>
+  </target>
+  <target name="create-stage-directories" depends="init">
+        <echo message="Make output directories..."/>
+        <!-- Make sure all required dir's are there -->
+        <mkdir dir="${stagedir}"/>
+  </target>
+
+  <target name="build" depends="init, create-bin-directories"> <!--  clean-bin, clean-temp, -->
+
+      <!-- Copy the source to the temp directory -->
+      <copy todir="${temp-dir}">
+  		<fileset dir="..">
+  	   <include name="**/*"/>
+        </fileset>
+      </copy>
+      
+      <!-- Copy the re-usable TAP Web content
+      <copy todir="${webcontent-directory}">
+        <fileset dir="../../../TapWebContent/TapWebContent/Tap">
+          <include name="**/*"/>
+        </fileset>      
+      </copy>  -->
+      
+      <!-- Copy the re-usable TJAF web content 
+      <copy todir="${webcontent-directory}/Tjaf">
+        <fileset dir="../../../TapWebContent/TapWebContent/Tjaf">
+          <include name="**/*"/>
+        </fileset>
+      </copy> -->
+  	
+      <!-- Compile the classes and place in the WEB-INF/classes folder -->
+      <javac srcdir="${src-inputdirectory}" destdir="${classes-outputdirectory}" classpath="${classpath}" debug="${debug}">
+          <classpath>
+              <path refid="classpath"/>
+          </classpath>
+      </javac>
+	  
+	  <echo message="Copy All the configuration files to WEB-INF/Classes " />
+      <!-- Now copy the config directory to the bin path -->
+     <!--  <copy todir="${classes-outputdirectory}">
+         <fileset dir="../config">
+            <include name="**/*.*"/>
+         </fileset>
+      </copy> -->
+      
+      <!-- Now package the WAR file -->
+      <jar destfile="${binpaths-dir}/${project}.war" basedir="${webcontent-directory}"/>
+
+  </target>  
+  
+
+  
+  <target name="stage" depends="init, clean-staging, create-stage-directories">
+  
+      <!-- Create the ZIP file. -->
+      <echo message="Creating installation ZIP file archive at ${stagedir}/${project_label}_${zipfile-suffix}"/>
+      <zip destfile="${stagedir}/${project_label}_${zipfile-suffix}" basedir="${bindir}"/>
+
+
+      <!-- Copy the jar file to the staging machine -->
+      <copy todir=".">
+	      
+          <fileset dir="${stagedir}"/>
+      </copy>
+      
+       <echo message="Installation archive has been staged."/>
+  	
+
+  </target>
+  
+  
+  <target name="build-stage" depends="build, stage"/>
+  <target name="full" depends="build"/>
+  
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - -->
+<!-- Two targets to clean up the build dir.        -->
+<!-- The second should only be called when you     -->
+<!-- want to start over completely with an empty   -->
+<!-- directory.                                    -->
+<!-- - - - - - - - - - - - - - - - - - - - - - - - -->
+  <target name="clean-bin" depends="init">
+    <echo message="Start clean-bin target..."/>
+    
+    <echo message="Reset bin directories..."/>
+    
+    <echo message="Delete ${bindir}..."/>
+    <delete dir="${bindir}"/>
+    
+    <echo message="Delete ${classes-outputdirectory}..."/>
+    <delete dir="${classes-outputdirectory}"/>
+    
+    <echo message="End clean-bin target."/>
+
+  </target>
+
+ 
+  <target name="clean-staging" depends="init">
+    <echo message="Start clean-staging target..."/>
+    
+    <echo message="Reset stage directories..."/>
+    <echo message="Delete ${stagedir}..."/>
+    <delete dir="${stagedir}"/>
+    
+    <echo message="End clean-staging target."/>
+
+  </target>
+  
+  <target name="clean-temp" depends="init">
+    <echo message="Start clean-temp target..."/>
+	    
+    <echo message="Reset temp directory..."/>
+    <echo message="Delete ${temp-dir}..."/>
+    <delete dir="${temp-dir}"/>
+    
+    <echo message="End clean-temp target."/>
+  	
+  </target>
+
+
+ 
+</project>

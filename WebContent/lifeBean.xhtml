@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	  xmlns:c="http://java.sun.com/jsf/core"
+	  xmlns:ui = "http://java.sun.com/jsf/facelets"
+	  xmlns:h = "http://java.sun.com/jsf/html"
+	  xmlns:j = "http://java.sun.com/jsp/jstl/core">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Conway's Game Of Life</title>
+<script>
+// Checks if user has entered correct values while manually updating the gird. If
+// the user enters random value, it is replaced by zero (i.e., ALIVE) else if
+// user leaves empty space, it is replaces by dot ()
+function validateUserInput(txtBox){
+	
+	if(txtBox.value == '.' || txtBox.value == '0'){
+		return;
+	}
+	if(txtBox.value == null || txtBox.value.trim() == ''){
+		
+		txtBox.value='.';
+	}else{
+		
+		txtBox.value='0';
+	}
+}
+</script>
+</h:head>
+<h:body>
+<div style="margin-left: 32%; width: 400px">
+	<h:form>
+	<j:choose>
+	
+		<j:when test="${not empty lifeBean.dataModel}">
+	
+	
+	   <table>
+	   <tr><td>
+	 
+		<table border="1px">
+		
+		<h:panelGroup id="dataTable">
+			<ui:repeat value="#{lifeBean.dataModel}" var="list">
+			
+				<tr>
+				    <ui:repeat value="#{list}" var="value" varStatus="y">
+				    
+				         <ui:fragment rendered="#{value eq '0'}"> 
+					 	  <td style="background:red">
+							<h:inputText value="#{list[y.index]}" onchange="validateUserInput(this);" style="display:block;width:35px"/>
+						  </td> 
+				         
+				         </ui:fragment>
+				         
+				          <ui:fragment rendered="#{value ne '0'}"> 
+					 	  <td style="background:black">
+							<h:inputText style="display:block;width:35px" onchange="validateUserInput(this);"  value="#{list[y.index]}" />
+						  </td> 
+				          
+				          </ui:fragment>
+				    </ui:repeat>
+			    </tr>
+			   
+			</ui:repeat>
+			 </h:panelGroup>
+		</table></td>
+	   </tr>
+	   <tr> 
+	   <td   style="text-align: center;">
+		   <h:commandButton title="Get Next State" action="#{lifeBean.getNextState()}" image="/images/Arrow-next-2-icon.png">
+		   </h:commandButton>
+		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		   <h:commandButton title="File History" action="#{lifeBean.openFolder()}" image="/images/view-out-files.png" >
+			 	
+		    </h:commandButton>
+		  
+	   </td>
+	   </tr>
+	   </table>
+		
+		</j:when>
+		<j:otherwise style="text-align: center;"><h1>Input file not found !</h1></j:otherwise>
+	</j:choose>
+	</h:form>
+    
+  </div> 
+ 
+</h:body>
+</html>
