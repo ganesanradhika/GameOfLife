@@ -79,7 +79,7 @@ function deleteHistory(){
 	   <tr> 
 	   <td   style="text-align: center;">
 		   <h:commandButton title="Get Next State" action="#{lifeBean.getNextState()}" image="/images/Arrow-next-2-icon.png">
-		  		<c:ajax render="dataTable" execute="@form" ></c:ajax>
+		  		<c:ajax render="dataTable" execute="@form" ></c:ajax> 
 		   </h:commandButton>
 		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		   <h:commandButton title="View Output files" action="#{lifeBean.openFolder()}" image="/images/view-out-files.png" >
