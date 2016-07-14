@@ -90,28 +90,6 @@
   	
   </target>  
   
-
-  
-  <target name="stage" depends="init, clean-staging, create-stage-directories">
-  
-      <!-- Create the ZIP file. -->
-      <echo message="Creating installation ZIP file archive at ${stagedir}/${project_label}_${zipfile-suffix}"/>
-      <zip destfile="${stagedir}/${project_label}_${zipfile-suffix}" basedir="${bindir}"/>
-
-
-      <!-- Copy the jar file to the staging machine -->
-      <copy todir=".">
-	      
-          <fileset dir="${stagedir}"/>
-      </copy>
-      
-       <echo message="Installation archive has been staged."/>
-  	
-
-  </target>
-  
-  
-  <target name="build-stage" depends="build, stage"/>
   <target name="full" depends="build"/>
   
 
