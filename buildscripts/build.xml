@@ -21,13 +21,12 @@
     <property name="src-inputdirectory" value="${temp-dir}/src"/>
     <property name="bindir" value="${temp-dir}/build_bin"/>
     <property name="binpaths-dir" value="${temp-dir}/build_bin/GameOfLife"/>
-    <property name="stagedir" value="${temp-dir}/staging"/>
+    <property name="stagedir" value="./build"/>
     <property name="libdir" value="${temp-dir}/WebContent/WEB-INF/lib"/>
   <!--   <property name="configdir" value="${temp-dir}/config"/> -->
 
     <property name="cm-stage-dir" value="./build"/>    
     
-<echo message="Radhika G....${env.CATALINA_HOME}"/>
 	
     <path id="classpath">
         <fileset id="libFiles" dir="${libdir}">
@@ -69,19 +68,6 @@
         </fileset>
       </copy>
       
-      <!-- Copy the re-usable TAP Web content
-      <copy todir="${webcontent-directory}">
-        <fileset dir="../../../TapWebContent/TapWebContent/Tap">
-          <include name="**/*"/>
-        </fileset>      
-      </copy>  -->
-      
-      <!-- Copy the re-usable TJAF web content 
-      <copy todir="${webcontent-directory}/Tjaf">
-        <fileset dir="../../../TapWebContent/TapWebContent/Tjaf">
-          <include name="**/*"/>
-        </fileset>
-      </copy> -->
   	
       <!-- Compile the classes and place in the WEB-INF/classes folder -->
       <javac srcdir="${src-inputdirectory}" destdir="${classes-outputdirectory}" classpath="${classpath}" debug="${debug}">
@@ -90,17 +76,18 @@
           </classpath>
       </javac>
 	  
-	  <echo message="Copy All the configuration files to WEB-INF/Classes " />
-      <!-- Now copy the config directory to the bin path -->
-     <!--  <copy todir="${classes-outputdirectory}">
-         <fileset dir="../config">
-            <include name="**/*.*"/>
-         </fileset>
-      </copy> -->
+
       
       <!-- Now package the WAR file -->
+	 <echo message="war location ${binpaths-dir}" />
       <jar destfile="${binpaths-dir}/${project}.war" basedir="${webcontent-directory}"/>
-
+  		<copy todir=".">
+  	         <fileset dir="${binpaths-dir}">
+  	            <include name="**/*.war"/>
+  	         </fileset>
+  	    </copy>
+  	<delete dir="${temp-dir}"/>
+  	
   </target>  
   
 
