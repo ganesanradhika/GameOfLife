@@ -3,6 +3,7 @@ package com.fuse.life;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -34,7 +35,7 @@ public class LifeBean {
 
 
 	public String getNextState() {
-	  
+		
 	   dataModel = lBean.calcNextGridState(dataModel); 
 	   FileHandler.setLifeGrid(dataModel);
 	   FileHandler.writeOutput();
@@ -56,5 +57,18 @@ public class LifeBean {
 		   return "";
 	}
 	
-
+	public String deleteFiles(){
+		File dir = new File(FileHandler.getFilesPath()).getParentFile();
+		List<File> files = Arrays.asList(dir.listFiles());
+		
+		for (File file : files) {
+			
+			if(file.getName().contains("output") && file.isFile() && !FileHandler.getInputFileName().contains(file.getName())){
+				file.delete();
+			}
+			
+		}
+		
+		return "";
+	}
 }

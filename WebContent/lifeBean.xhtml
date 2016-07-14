@@ -25,6 +25,16 @@ function validateUserInput(txtBox){
 		txtBox.value='0';
 	}
 }
+
+function deleteHistory(){
+	var ok = confirm('Do you want to delete all output files created except the last output file?');
+	
+	if(ok){
+		return true;
+	}else{
+		return false;
+	}
+}
 </script>
 </h:head>
 <h:body>
@@ -71,7 +81,11 @@ function validateUserInput(txtBox){
 		   <h:commandButton title="Get Next State" action="#{lifeBean.getNextState()}" image="/images/Arrow-next-2-icon.png">
 		   </h:commandButton>
 		   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		   <h:commandButton title="File History" action="#{lifeBean.openFolder()}" image="/images/view-out-files.png" >
+		   <h:commandButton title="View Output files" action="#{lifeBean.openFolder()}" image="/images/view-out-files.png" >
+			 	
+		    </h:commandButton>
+		     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		     <h:commandButton title="Delete File History" onclick="return deleteHistory();" action="#{lifeBean.deleteFiles()}" image="/images/delete-history-icon.png" >
 			 	
 		    </h:commandButton>
 		  
