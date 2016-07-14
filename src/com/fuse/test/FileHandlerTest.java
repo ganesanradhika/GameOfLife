@@ -52,60 +52,58 @@ public class FileHandlerTest {
   }
 
   @Test
-  public final void testGetResourceStringAndSucceed() throws Exception {
-
-    //mockStatic(ResourceBundle.class);
+  public final void testGetFileReaderAndSucceed() throws Exception {
 	  mockStatic(FacesContext.class);
 	  mockStatic(ExternalContext.class);
 	  mockStatic(InputStream.class);
+	  
 	  mockStatic(BufferedReader.class);
 	  mockStatic(InputStreamReader.class);
-    //expect(ResourceBundle.getBundle("SomeBundleName", Locale.ENGLISH)).andReturn(bundle);
 	  expect(FacesContext.getCurrentInstance()).andReturn(this.facesContext);
 	  expect(facesContext.getExternalContext()).andReturn(this.externalContext);
+	   
+      String inputFileName = "/files/input1.txt";
+	  expect(externalContext.getResourceAsStream(inputFileName)).andReturn(this.inputStream);
+      expectNew(InputStreamReader.class, this.inputStream).andReturn(inputStreamReader);
+      expectNew(BufferedReader.class, this.inputStreamReader).andReturn(bufferedReader);
+      replayAll();
+      FileHandler.getFileReader();
+      verifyAll();
+  }
+  
+  @Test(expected=AssertionError.class)
+  public final void testGetFileReaderAndFail() throws Exception {
+	  mockStatic(FacesContext.class);
+	  mockStatic(ExternalContext.class);
+	  mockStatic(InputStream.class);
 	  
+	  mockStatic(BufferedReader.class);
+	  mockStatic(InputStreamReader.class);
+	  expect(FacesContext.getCurrentInstance()).andReturn(this.facesContext);
+	  expect(facesContext.getExternalContext()).andReturn(this.externalContext);
+	   
+      String inputFileName = "/files/input1.txt";
+	  expect(externalContext.getResourceAsStream(inputFileName)).andReturn(this.inputStream);
+      expectNew(InputStreamReader.class, this.inputStream).andReturn(inputStreamReader);
+      expectNew(BufferedReader.class, this.inputStreamReader).andReturn(bufferedReader);
+      replayAll();
+      FileHandler.getFileReader();
+      verifyAll();
+  }
+  
+  @Test
+  public final void testBuildGridFromInputFileAndSucceed() throws Exception {
+
 	  
-    //expect(bundle.getString(key)).andReturn(message);
-    expect(externalContext.getResourceAsStream("/files/input.txt")).andReturn(this.inputStream);
-    expectNew(InputStreamReader.class, this.inputStream).andReturn(inputStreamReader);
-    expectNew(BufferedReader.class, this.inputStreamReader).andReturn(bufferedReader);
-    String inputLine="...000..0";
-    expect(bufferedReader.readLine()).andReturn(inputLine).andReturn(null);
-    bufferedReader.close();
-   // expect(bufferedReader.close());
-    replayAll();
-    //String result = instance.getResourceString(key);
-   // BufferedReader br = FileHandler.getFileReader();
-    FileHandler.buildGridFromInputFile(bufferedReader);
-   // List<List<String>> arr = FileHandler.getLifeGrid();
-   // assert(FileHandler.getLifeGrid().isEmpty());
-    verifyAll();
+	  mockStatic(BufferedReader.class);
+	  
+	  String inputLine="...000..0";
+      expect(bufferedReader.readLine()).andReturn(inputLine).andReturn(null);
+      bufferedReader.close();
+      replayAll();
+      FileHandler.buildGridFromInputFile(bufferedReader);
+      verifyAll();
   }
 
- /* @Test(expected = MissingResourceException.class)
-  public final void testGetResourceStringWithStringMissing() {
 
-    mockStatic(ResourceBundle.class);
-    expect(ResourceBundle.getBundle("SomeBundleName", Locale.ENGLISH)).andReturn(bundle);
-
-    final String key = "DUMMY";
-    Exception e = new MissingResourceException(key, key, key);
-    expect(bundle.getString(key)).andThrow(e);
-
-    replayAll();
-    instance.getResourceString(key);
-  }
-
-  @Test(expected = MissingResourceException.class)
-  public final void testGetResourceStringWithBundleMissing() {
-
-    mockStatic(ResourceBundle.class);
-    final String key = "DUMMY";
-    Exception e = new MissingResourceException(key, key, key);
-    expect(ResourceBundle.getBundle("SomeBundleName", Locale.ENGLISH)).andThrow(e);
-
-    replayAll();
-    instance.getResourceString(key);
-  }
-*/
 }
